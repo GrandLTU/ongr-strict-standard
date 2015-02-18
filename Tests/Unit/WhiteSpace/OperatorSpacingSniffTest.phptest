@@ -1,0 +1,17 @@
+<?php
+
+if (!$bar) {
+    foo($foo);
+}
+
+if (! $bar) {
+    foo($foo);
+}
+
+if (!   $bar) {
+    foo($foo);
+}
+
+$foo = !$bar;
+$foo = ! $bar;
+$foo = !    $bar;

@@ -60,7 +60,7 @@ class OperatorSpacingSniff implements PHP_CodeSniffer_Sniff
         ];
 
         return array_unique(
-            array_merge($comparison, $operators, $assignment, $inlineIf)
+            array_merge($comparison, $operators, $assignment, $inlineIf, [T_BOOLEAN_NOT])
         );
     }
 
@@ -110,6 +110,19 @@ class OperatorSpacingSniff implements PHP_CodeSniffer_Sniff
             || ($tokens[$stackPtr - 1]['code'] == T_INLINE_THEN
             && $tokens[$stackPtr]['code'] == T_INLINE_ELSE)
         ) {
+            return;
+        }
+
+        if ($tokens[$stackPtr]['code'] === T_BOOLEAN_NOT) {
+            if ($tokens[$stackPtr + 1]['code'] === T_WHITESPACE) {
+                $phpcsFile->addError(
+                    'Expected 0 spaces after "!" operator; %s found',
+                    $stackPtr,
+                    'SpaceAfterNot',
+                    [strlen($tokens[$stackPtr + 1]['content'])]
+                );
+            }
+
             return;
         }
 
